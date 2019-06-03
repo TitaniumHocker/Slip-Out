@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
 
-import pygame
+
 import sys
 
 
-class MainMenu():
+class Blackout(object):
     def __init__(self):
         pass

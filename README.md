@@ -4,8 +4,7 @@ Simple demo made by students of Colledge of Communications №54, group 2ИСП1
 
 ### Description
 
-Summer 1989. On the territory of the scientific town lives a guy named Denis. His father, Colonel of State Security, is responsible for the security of the factory, Denis himself, wants to follow in his father’s steps and is preparing to enter a military colledge, but one morning will change everything.
-Denis must save his life and the life of people he meets. At the same time, he has limited time and no turning back. His path is more like a slip into a loop that is about to close.
+Summer 1989. On the territory of the scientific town lives a guy named Denis. His father, Colonel of State Security, is responsible for the security of the factory, Denis himself, wants to follow in his father’s steps and is preparing to enter a military colledge, but one morning will change everything. Denis must save his life and the life of people he meets. At the same time, he has limited time and no turning back. His path is more like a slip into a loop that is about to close.
 
 ### Features
 
