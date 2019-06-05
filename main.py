@@ -14,6 +14,7 @@ from textWindow import TextWindow
 from popUpObject import PopUpObject
 from blackout import Blackout
 from background import BackGround
+from textObject import TextObject
 
 
 class Game(object):
@@ -31,6 +32,7 @@ class Game(object):
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+        self.startUp = True
 
     def update(self):
         for o in self.objects:
@@ -60,7 +62,7 @@ class Game(object):
         self.textWindow = TextWindow()
         self.objects.append(self.textWindow)
 
-    def createArrow(self, img, pos):
+    def createArrow(self, img='res/img/play.png', pos=(1125, 620)):
         self.arrow = PopUpObject(img, pos)
         self.objects.append(self.arrow)
 
@@ -68,19 +70,21 @@ class Game(object):
         self.background = BackGround(img)
         self.objects.append(self.background)
 
+    def createTextObject(self, text, pos):
+        self.textObject = TextObject(text, pos)
+        self.objects.append(self.textObject)
+
     def getReady(self):
-        self.createBackground('res/img/scene-01.0.png')
+        self.createBackground('res/img/menu.png')
         self.createTextWindow()
-        self.createArrow('res/img/play.png', (1125, 620))
+        self.createTextObject('Hello World', (90, 515))
+        self.createArrow()
 
     def run(self):
         while not self.gameOver:
-            # self.surface.blit()
-
             self.handle_events()
             self.update()
             self.draw()
-
             pygame.display.update()
             self.clock.tick(self.frameRate)
 

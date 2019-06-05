@@ -8,11 +8,12 @@ from pygame import SRCALPHA
 
 
 class PopUpObject(Sprite):
-    def __init__(self, img, pos=(0, 0)):
+    def __init__(self, img, pos=(0, 0), slowly=False):
         Sprite.__init__(self)
         self.surface = Surface((1280, 720), SRCALPHA)
         self.image = image.load(img).convert_alpha()
         self.surface.blit(self.image, pos)
+        self.slowly = slowly
 
     def upload(self, img):
         self.image = image.load(img).convert_alpha()
