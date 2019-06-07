@@ -5,6 +5,7 @@ from pygame import Surface
 from pygame import image
 from pygame import display
 from pygame import SRCALPHA
+from pygame import Color
 
 
 class TextWindow(Sprite):
@@ -17,5 +18,5 @@ class TextWindow(Sprite):
     def update(self):
         pass
 
-    def draw(self):
-        return self.surface
+    def draw(self, surface):
+        surface.blit(self.surface, (0, 0))

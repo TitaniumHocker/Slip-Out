@@ -1,0 +1,11 @@
+$background:res/img/menu.png
+$music:res/music/Main Menu OST.mp3
+$text:бл//nабл/nаб\nла\\n
+сукаааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааааа
+$pause:true
+$background:res/img/scene-05.0.png
+$text:Саня ты в порядке?
+$pause:true
+$background:res/img/scene-04.0.png
+$text:govovovovov
+$pause:true

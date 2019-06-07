@@ -5,6 +5,7 @@ from pygame import Surface
 from pygame import image
 from pygame import display
 from pygame import SRCALPHA
+from pygame import Color
 
 
 class BackGround(Sprite):
@@ -16,10 +17,11 @@ class BackGround(Sprite):
 
     def upload(self, img):
         self.image = image.load(img).convert_alpha()
+        self.surface.fill(Color("black"))
         self.surface.blit(self.image, (0, 0))
 
-    def draw(self):
-        return self.surface
+    def draw(self, surface):
+        surface.blit(self.surface, (0, 0))
 
     def update(self):
         pass

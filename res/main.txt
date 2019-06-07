@@ -1,8 +1,0 @@
-$background:res/img/menu.png
-$music:res/music/Main Menu OST.mp3
-$textwindow:true
-$text:блаблабла
-$pause:true
-$background:res/img/scene-01.0.png
-$text:ололло
-$pause:true

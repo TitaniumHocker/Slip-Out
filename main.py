@@ -19,10 +19,14 @@ from textObject import TextObject
 
 class Game(object):
     def __init__(self, caption, width, height, frame_rate):
-        # self.backgroundImage = pygame.image.load()
         self.frameRate = frame_rate
         self.gameOver = False
         self.objects = []
+        self.steps = []
+        self.step = 0
+        self.pause = False
+        self.startUp = True
+
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
         pygame.font.init()
@@ -32,31 +36,35 @@ class Game(object):
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
-        self.startUp = True
 
     def update(self):
-        for o in self.objects:
-            o.update()
+        for obj in self.objects:
+            obj.update()
 
     def draw(self):
-        for o in self.objects:
-            self.surface.blit(o.draw(), (0, 0))
+        for obj in self.objects:
+            obj.draw(self.surface)
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
+                # sys.exit()
             elif event.type == pygame.KEYUP:
                 pass
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    self.background.upload('res/img/scene-02.0.png')
+                    self.pause = False
             elif event.type in (pygame.MOUSEBUTTONDOWN,
                                 pygame.MOUSEBUTTONUP,
                                 pygame.MOUSEMOTION):
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
+
+    def uploadInstructions(self):
+        with open('instructions.txt', 'r') as instructions:
+            for step in instructions.read().split('$')[1::]:
+                self.steps.append(step.split(':'))
 
     def createTextWindow(self):
         self.textWindow = TextWindow()
@@ -70,18 +78,35 @@ class Game(object):
         self.background = BackGround(img)
         self.objects.append(self.background)
 
-    def createTextObject(self, text, pos):
+    def createTextObject(self, text, pos=(90, 515)):
         self.textObject = TextObject(text, pos)
         self.objects.append(self.textObject)
 
     def getReady(self):
+        self.uploadInstructions()
         self.createBackground('res/img/menu.png')
         self.createTextWindow()
-        self.createTextObject('Hello World', (90, 515))
+        self.createTextObject('')
         self.createArrow()
+
+    def handleSteps(self):
+        while not self.pause:
+            if self.steps[self.step][0] == 'pause' and self.steps[self.step][1].strip() == 'true':
+                self.pause = True
+            elif self.steps[self.step][0] == 'background':
+                self.background.upload(self.steps[self.step][1].strip())
+            elif self.steps[self.step][0] == 'music':
+                self.music = self.steps[self.step][1].strip()
+            elif self.steps[self.step][0] == 'text':
+                self.textObject.upload(self.steps[self.step][1].strip())
+            elif self.steps[self.step][0] == 'gameover' and self.steps[self.step][1].strip() == 'true':
+                self.pause = True
+                self.gameOver = True
+            self.step += 1
 
     def run(self):
         while not self.gameOver:
+            self.handleSteps()
             self.handle_events()
             self.update()
             self.draw()
