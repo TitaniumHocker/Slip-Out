@@ -78,38 +78,52 @@ class Game(object):
         self.background = BackGround(img)
         self.objects.append(self.background)
 
-    def createTextObject(self, text, pos=(90, 515)):
-        self.textObject = TextObject(text, pos)
+    def createTextObject(self, text):
+        self.textObject = TextObject(text, self.surface)
         self.objects.append(self.textObject)
 
     def getReady(self):
         self.uploadInstructions()
         self.createBackground('res/img/menu.png')
         self.createTextWindow()
-        self.createTextObject('')
         self.createArrow()
+        self.createTextObject('')
 
     def handleSteps(self):
         while not self.pause:
-            if self.steps[self.step][0] == 'pause' and self.steps[self.step][1].strip() == 'true':
+            if self.steps[self.step][0] == 'pause'\
+                    and self.steps[self.step][1].strip() == 'true':
                 self.pause = True
             elif self.steps[self.step][0] == 'background':
                 self.background.upload(self.steps[self.step][1].strip())
             elif self.steps[self.step][0] == 'music':
                 self.music = self.steps[self.step][1].strip()
             elif self.steps[self.step][0] == 'text':
-                self.textObject.upload(self.steps[self.step][1].strip())
-            elif self.steps[self.step][0] == 'gameover' and self.steps[self.step][1].strip() == 'true':
+                for obj in self.objects[:len(self.objects) - 1:]:
+                    obj.draw(self.surface)
+                self.textObject.first = True
+                self.textObject.upload(self.steps[self.step][1].strip(),
+                                       self.surface)
+            elif self.steps[self.step][0] == 'person1':
+                pass
+            elif self.steps[self.step][0] == 'person2':
+                pass
+            elif self.steps[self.step][0] == 'name1':
+                pass
+            elif self.steps[self.step][0] == 'name2':
+                pass
+            elif self.steps[self.step][0] == 'gameover'\
+                    and self.steps[self.step][1].strip() == 'true':
                 self.pause = True
                 self.gameOver = True
             self.step += 1
 
     def run(self):
         while not self.gameOver:
-            self.handleSteps()
             self.handle_events()
             self.update()
             self.draw()
+            self.handleSteps()
             pygame.display.update()
             self.clock.tick(self.frameRate)
 

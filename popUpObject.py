@@ -15,11 +15,13 @@ class PopUpObject(Sprite):
         self.image = image.load(img).convert_alpha()
         self.surface.blit(self.image, pos)
         self.slowly = slowly
+        self.pos = pos
 
     def upload(self, img):
         self.image = image.load(img).convert_alpha()
-        self.surface.fill(Color("black"))
-        self.surface.blit(self.image, pos)
+        # self.surface.fill(Color("black"))
+        self.surface = Surface((1280, 720), SRCALPHA)
+        self.surface.blit(self.image, self.pos)
 
     def draw(self, surface):
         surface.blit(self.surface, (0, 0))

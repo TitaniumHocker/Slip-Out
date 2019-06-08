@@ -15,6 +15,11 @@ class TextWindow(Sprite):
         self.image = image.load('res/img/dialog.png').convert_alpha()
         self.surface.blit(self.image, (0, 0))
 
+    def upload(self):
+        self.image = image.load(img).convert_alpha()
+        self.surface = Surface((1280, 720), SRCALPHA)
+        self.surface.blit(self.image, (0, 0))
+
     def update(self):
         pass
 
