@@ -12,9 +12,10 @@ import pygame
 from pygame.rect import Rect
 from textWindow import TextWindow
 from popUpObject import PopUpObject
-from blackout import Blackout
+# from blackout import Blackout
 from background import BackGround
 from textObject import TextObject
+from nameObject import NameObject
 
 
 class Game(object):
@@ -26,6 +27,7 @@ class Game(object):
         self.step = 0
         self.pause = False
         self.startUp = True
+        self.awaitChoise = False
 
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
@@ -53,8 +55,52 @@ class Game(object):
             elif event.type == pygame.KEYUP:
                 pass
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and not self.awaitChoise:
                     self.pause = False
+                elif event.key == pygame.K_1:
+                    self.awaitChoise = False
+                    if '|' in self.choises[0]:
+                        self.gameOver = True
+                        for obj in self.objects:
+                            if obj.name == 'TextObject':
+                                pass
+                            else:
+                                obj.draw(self.surface)
+                        self.textObject.first = True
+                        self.textObject.upload(self.choises[0],
+                                               self.surface)
+                    else:
+                        for obj in self.objects:
+                            if obj.name == 'TextObject':
+                                pass
+                            else:
+                                obj.draw(self.surface)
+                        self.textObject.first = True
+                        self.textObject.upload(self.choises[0].strip(),
+                                               self.surface)
+                elif event.key == pygame.K_2:
+                    self.awaitChoise = False
+                    if '|' in self.choises[1]:
+                        self.gameOver = True
+                        for obj in self.objects:
+                            if obj.name == 'TextObject':
+                                pass
+                            else:
+                                obj.draw(self.surface)
+                        self.textObject.first = True
+                        self.textObject.upload(self.choises[1],
+                                               self.surface)
+                    else:
+                        for obj in self.objects:
+                            if obj.name == 'TextObject':
+                                pass
+                            else:
+                                obj.draw(self.surface)
+                        self.textObject.first = True
+                        self.textObject.upload(self.choises[1].strip(),
+                                               self.surface)
+                else:
+                    pass
             elif event.type in (pygame.MOUSEBUTTONDOWN,
                                 pygame.MOUSEBUTTONUP,
                                 pygame.MOUSEMOTION):
@@ -67,7 +113,7 @@ class Game(object):
                 self.steps.append(step.split(':'))
 
     def createTextWindow(self):
-        self.textWindow = TextWindow()
+        self.textWindow = TextWindow('res/img/dialog2.png')
         self.objects.append(self.textWindow)
 
     def createArrow(self, img='res/img/play.png', pos=(1125, 620)):
@@ -82,16 +128,58 @@ class Game(object):
         self.textObject = TextObject(text, self.surface)
         self.objects.append(self.textObject)
 
+    def createNameObject1(self, text, name):
+        self.nameObject1 = NameObject(text, self.surface, (150, 470), name)
+        self.objects.append(self.nameObject1)
+
+    def createNameObject2(self, text, name):
+        self.nameObject2 = NameObject(text, self.surface, (900, 470), name)
+        self.objects.append(self.nameObject2)
+
+    def createPerson1(self, img, pos):
+        self.person1 = PopUpObject(img, pos)
+        self.objects.append(self.person1)
+
+    def createPerson2(self, img, pos):
+        self.person2 = PopUpObject(img, pos)
+        self.objects.append(self.person2)
+
+    def createPopUp1(self, img, pos):
+        self.popUp1 = PopUpObject(img, pos)
+        self.objects.append(self.popUp1)
+
+    def createPopUp2(self, img, pos):
+        self.popUp2 = PopUpObject(img, pos)
+        self.objects.append(self.popUp2)
+
     def getReady(self):
         self.uploadInstructions()
-        self.createBackground('res/img/menu.png')
+        self.createBackground('res/img/none.png')
+        self.createPopUp1('res/img/none.png', (10, 30))
+        self.createPopUp2('res/img/none.png', (600, 70))
+        self.createPerson1('res/img/none.png', (110, 160))
+        self.createPerson2('res/img/none.png', (815, 145))
         self.createTextWindow()
-        self.createArrow()
+        # self.createArrow()
         self.createTextObject('')
+        self.createNameObject1('', 'name1')
+        self.createNameObject2('', 'name2')
+
+    def gameOverLogo(self):
+        while True:
+            self.surface.blit(pygame.image.load('res/img/scene-12.0.png')
+                              .convert_alpha(), (0, 0))
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        pygame.quit()
 
     def handleSteps(self):
         while not self.pause:
-            if self.steps[self.step][0] == 'pause'\
+            if self.gameOver:
+                self.gameOverLogo()
+            elif self.steps[self.step][0] == 'pause'\
                     and self.steps[self.step][1].strip() == 'true':
                 self.pause = True
             elif self.steps[self.step][0] == 'background':
@@ -99,27 +187,59 @@ class Game(object):
             elif self.steps[self.step][0] == 'music':
                 self.music = self.steps[self.step][1].strip()
             elif self.steps[self.step][0] == 'text':
-                for obj in self.objects[:len(self.objects) - 1:]:
-                    obj.draw(self.surface)
+                for obj in self.objects:
+                    if obj.name == 'TextObject':
+                        pass
+                    else:
+                        obj.draw(self.surface)
                 self.textObject.first = True
                 self.textObject.upload(self.steps[self.step][1].strip(),
                                        self.surface)
             elif self.steps[self.step][0] == 'person1':
-                pass
+                self.person1.upload(self.steps[self.step][1].strip())
             elif self.steps[self.step][0] == 'person2':
-                pass
+                self.person2.upload(self.steps[self.step][1].strip())
             elif self.steps[self.step][0] == 'name1':
-                pass
+                for obj in self.objects:
+                    if obj.name == 'name1':
+                        pass
+                    else:
+                        obj.draw(self.surface)
+                    self.nameObject1.upload(self.steps[self.step][1].strip(),
+                                            self.surface)
             elif self.steps[self.step][0] == 'name2':
-                pass
+                for obj in self.objects:
+                    if obj.name == 'name2':
+                        pass
+                    else:
+                        obj.draw(self.surface)
+                    self.nameObject2.upload(self.steps[self.step][1].strip(),
+                                            self.surface)
+            elif self.steps[self.step][0] == 'choise':
+                self.awaitChoise = True
+                self.pause = True
+                self.choises = self.steps[self.step][1].split('&')
+            elif self.steps[self.step][0] == 'textwindow':
+                self.textWindow.upload(self.steps[self.step][1].strip())
+            elif self.steps[self.step][0] == 'popup1':
+                self.parsedPopUp1 = self.steps[self.step][1].split('&')
+                self.popUp1.upload(self.parsedPopUp1[0].strip(),
+                                   (int(self.parsedPopUp1[1].strip()),
+                                   int(self.parsedPopUp1[2].strip())))
+            elif self.steps[self.step][0] == 'popup2':
+                self.parsedPopUp2 = self.steps[self.step][1].split('&')
+                self.popUp2.upload(self.parsedPopUp2[0].strip(),
+                                   (int(self.parsedPopUp2[1].strip()),
+                                   int(self.parsedPopUp2[2].strip())))
             elif self.steps[self.step][0] == 'gameover'\
                     and self.steps[self.step][1].strip() == 'true':
                 self.pause = True
                 self.gameOver = True
+                self.gameOverLogo()
             self.step += 1
 
     def run(self):
-        while not self.gameOver:
+        while True:
             self.handle_events()
             self.update()
             self.draw()

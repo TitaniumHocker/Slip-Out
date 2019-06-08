@@ -13,21 +13,20 @@ from pygame import display
 colour = (25, 25, 25)
 
 
-class TextObject(Sprite):
-    def __init__(self, txt, surface):
+class NameObject(Sprite):
+    def __init__(self, txt, surface, pos, name):
         Sprite.__init__(self)
         self.surface = Surface((1280, 720), SRCALPHA)
-        self.txt = txt.split('&')
-        # self.pos = [(90, x + 515) for x in range(0, 600, 25)]
-        self.pos = [x + 515 for x in range(0, 600, 25)]
+        self.txt = txt
+        self.pos = pos
         self.font = font.Font('res/fonts/16643.otf', 20)
         self.screen = surface
         self.render(self.screen)
         self.first = True
-        self.name = 'TextObject'
+        self.name = name
 
     def upload(self, text, surface):
-        self.txt = text.split('&')
+        self.txt = text
         self.render(surface)
 
     def update(self):
@@ -38,19 +37,15 @@ class TextObject(Sprite):
         surface.blit(self.surface, (0, 0))
         display.update()
         for i, txt in enumerate(self.txt):
-            for k, sign in enumerate(txt.strip()):
-                if sign == '|':
-                    pass
-                else:
-                    self.signSurface = Surface((1280, 720), SRCALPHA)
-                    self.textSurface = self.font.render(sign, True, colour)
-                    self.signSurface.blit(self.textSurface,
-                                          (k * 11 + 90, self.pos[i]))
-                    self.surface.blit(self.textSurface, (k * 11 + 90,
-                                      self.pos[i]))
-                    surface.blit(self.signSurface, (0, 0))
-                    display.update()
-                    delay(3)
+            self.signSurface = Surface((1280, 720), SRCALPHA)
+            self.textSurface = self.font.render(txt, True, colour)
+            self.signSurface.blit(self.textSurface,
+                                  (i * 11 + self.pos[0], self.pos[1]))
+            self.surface.blit(self.textSurface,
+                              (i * 11 + self.pos[0], self.pos[1]))
+            surface.blit(self.signSurface, (0, 0))
+            display.update()
+            delay(3)
         self.first = False
 
     def draw(self, surface, typing=False):

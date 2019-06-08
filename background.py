@@ -14,6 +14,7 @@ class BackGround(Sprite):
         self.surface = Surface((1280, 720), SRCALPHA)
         self.image = image.load(img).convert_alpha()
         self.surface.blit(self.image, (0, 0))
+        self.name = 'background'
 
     def upload(self, img):
         self.image = image.load(img).convert_alpha()
