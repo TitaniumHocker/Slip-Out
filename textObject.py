@@ -27,6 +27,7 @@ class TextObject(Sprite):
         self.name = 'TextObject'
 
     def upload(self, text, surface):
+        self.first = True
         self.txt = text.split('&')
         self.render(surface)
 

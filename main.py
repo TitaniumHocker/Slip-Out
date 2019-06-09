@@ -43,15 +43,17 @@ class Game(object):
         for obj in self.objects:
             obj.update()
 
-    def draw(self):
+    def draw(self, passed='None'):
         for obj in self.objects:
-            obj.draw(self.surface)
+            if obj.name == passed or obj.name in passed:
+                pass
+            else:
+                obj.draw(self.surface)
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                # sys.exit()
             elif event.type == pygame.KEYUP:
                 pass
             elif event.type == pygame.KEYDOWN:
@@ -61,16 +63,16 @@ class Game(object):
                     self.awaitChoise = False
                     if '|' in self.choises[0]:
                         self.gameOver = True
-                        self.drawNewText(self.choises[0])
+                        self.choiseHandler(self.choises[0])
                     else:
-                        self.drawNewText(self.choises[0].strip())
+                        self.choiseHandler(self.choises[0])
                 elif event.key == pygame.K_2 and self.awaitChoise:
                     self.awaitChoise = False
                     if '|' in self.choises[1]:
                         self.gameOver = True
-                        self.drawNewText(self.choises[1].strip())
+                        self.choiseHandler(self.choises[1])
                     else:
-                        self.drawNewText(self.choises[1].strip())
+                        self.choiseHandler(self.choises[1])
                 else:
                     pass
             elif event.type in (pygame.MOUSEBUTTONDOWN,
@@ -137,15 +139,6 @@ class Game(object):
         self.createNameObject1('', 'name1')
         self.createNameObject2('', 'name2')
 
-    def drawNewText(self, text):
-        for obj in self.objects:
-            if obj.name == 'TextObject':
-                pass
-            else:
-                obj.draw(self.surface)
-            self.textObject.first = True
-            self.textObject.upload(text, self.surface)
-
     def gameOverLogo(self):
         while True:
             self.surface.blit(pygame.image.load('res/img/scene-12.0.png')
@@ -155,6 +148,37 @@ class Game(object):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         pygame.quit()
+
+    def choiseHandler(self, choise):
+        if '@' not in choise:
+            self.draw('TextObject')
+            self.textObject.upload(choise.split('=')[1].strip(),
+                                   self.surface)
+        else:
+            for el in choise.split('@'):
+                splitedElements = el.split('=')
+                if splitedElements[0] == 'text':
+                    self.draw('TextObject')
+                    self.textObject.upload(splitedElements[1].strip(),
+                                           self.surface)
+                elif splitedElements[0] == 'music':
+                    pass
+                elif splitedElements[0] == 'name1':
+                    self.draw('name1')
+                    self.nameObject1.upload(splitedElements[1].strip(),
+                                            self.surface)
+                elif splitedElements[0] == 'name2':
+                    self.draw('name2')
+                    self.nameObject2.upload(splitedElements[1].strip(),
+                                            self.surface)
+                elif splitedElements[0] == 'person1':
+                    self.person1.upload(splitedElements[1].strip())
+                elif splitedElements[0] == 'person2':
+                    self.person2.upload(splitedElements[1].strip())
+                elif splitedElements[0] == 'background':
+                    self.background.upload(splitedElements[1].strip())
+                elif splitedElements[0] == 'textwindow':
+                    self.textWindow.upload(splitedElements[1].strip())
 
     def handleSteps(self):
         while not self.pause:
@@ -168,12 +192,7 @@ class Game(object):
             elif self.steps[self.step][0] == 'music':
                 self.music = self.steps[self.step][1].strip()
             elif self.steps[self.step][0] == 'text':
-                for obj in self.objects:
-                    if obj.name == 'TextObject':
-                        pass
-                    else:
-                        obj.draw(self.surface)
-                self.textObject.first = True
+                self.draw('TextObject')
                 self.textObject.upload(self.steps[self.step][1].strip(),
                                        self.surface)
             elif self.steps[self.step][0] == 'person1':
@@ -181,37 +200,23 @@ class Game(object):
             elif self.steps[self.step][0] == 'person2':
                 self.person2.upload(self.steps[self.step][1].strip())
             elif self.steps[self.step][0] == 'name1':
-                for obj in self.objects:
-                    if obj.name == 'name1':
-                        pass
-                    else:
-                        obj.draw(self.surface)
-                    self.nameObject1.upload(self.steps[self.step][1].strip(),
-                                            self.surface)
+                self.draw('name1')
+                self.nameObject1.upload(self.steps[self.step][1], self.surface)
             elif self.steps[self.step][0] == 'name2':
-                for obj in self.objects:
-                    if obj.name == 'name2':
-                        pass
-                    else:
-                        obj.draw(self.surface)
-                    self.nameObject2.upload(self.steps[self.step][1].strip(),
-                                            self.surface)
+                self.draw('name2')
+                self.nameObject2.upload(self.steps[self.step][1], self.surface)
             elif self.steps[self.step][0] == 'choise':
                 self.awaitChoise = True
                 self.pause = True
-                self.choises = self.steps[self.step][1].split('&')
+                self.choises = self.steps[self.step][1].split(';')
             elif self.steps[self.step][0] == 'textwindow':
                 self.textWindow.upload(self.steps[self.step][1].strip())
             elif self.steps[self.step][0] == 'popup1':
                 self.parsedPopUp1 = self.steps[self.step][1].split('&')
-                self.popUp1.upload(self.parsedPopUp1[0].strip(),
-                                   (int(self.parsedPopUp1[1].strip()),
-                                   int(self.parsedPopUp1[2].strip())))
+                self.popUp1.upload(self.parsedPopUp1[0].strip())
             elif self.steps[self.step][0] == 'popup2':
                 self.parsedPopUp2 = self.steps[self.step][1].split('&')
-                self.popUp2.upload(self.parsedPopUp2[0].strip(),
-                                   (int(self.parsedPopUp2[1].strip()),
-                                   int(self.parsedPopUp2[2].strip())))
+                self.popUp2.upload(self.parsedPopUp2[0].strip())
             elif self.steps[self.step][0] == 'gameover'\
                     and self.steps[self.step][1].strip() == 'true':
                 self.pause = True
