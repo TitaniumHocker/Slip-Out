@@ -70,7 +70,6 @@ $name1:Денис
 $text:1.Махнуть дяде Мише.
 &2.Пройти мимо незаметно.
 $textwindow:res/img/dialog2.png
-$name1:
 $name2: Дядя Миша
 $person2:res/img/pers 02.png
 $choise:

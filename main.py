@@ -12,10 +12,10 @@ import pygame
 from pygame.rect import Rect
 from textWindow import TextWindow
 from popUpObject import PopUpObject
-# from blackout import Blackout
 from background import BackGround
 from textObject import TextObject
 from nameObject import NameObject
+import config as cfg
 
 
 class Game(object):
@@ -57,48 +57,20 @@ class Game(object):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not self.awaitChoise:
                     self.pause = False
-                elif event.key == pygame.K_1:
+                elif event.key == pygame.K_1 and self.awaitChoise:
                     self.awaitChoise = False
                     if '|' in self.choises[0]:
                         self.gameOver = True
-                        for obj in self.objects:
-                            if obj.name == 'TextObject':
-                                pass
-                            else:
-                                obj.draw(self.surface)
-                        self.textObject.first = True
-                        self.textObject.upload(self.choises[0],
-                                               self.surface)
+                        self.drawNewText(self.choises[0])
                     else:
-                        for obj in self.objects:
-                            if obj.name == 'TextObject':
-                                pass
-                            else:
-                                obj.draw(self.surface)
-                        self.textObject.first = True
-                        self.textObject.upload(self.choises[0].strip(),
-                                               self.surface)
-                elif event.key == pygame.K_2:
+                        self.drawNewText(self.choises[0].strip())
+                elif event.key == pygame.K_2 and self.awaitChoise:
                     self.awaitChoise = False
                     if '|' in self.choises[1]:
                         self.gameOver = True
-                        for obj in self.objects:
-                            if obj.name == 'TextObject':
-                                pass
-                            else:
-                                obj.draw(self.surface)
-                        self.textObject.first = True
-                        self.textObject.upload(self.choises[1],
-                                               self.surface)
+                        self.drawNewText(self.choises[1].strip())
                     else:
-                        for obj in self.objects:
-                            if obj.name == 'TextObject':
-                                pass
-                            else:
-                                obj.draw(self.surface)
-                        self.textObject.first = True
-                        self.textObject.upload(self.choises[1].strip(),
-                                               self.surface)
+                        self.drawNewText(self.choises[1].strip())
                 else:
                     pass
             elif event.type in (pygame.MOUSEBUTTONDOWN,
@@ -108,15 +80,15 @@ class Game(object):
                     handler(event.type, event.pos)
 
     def uploadInstructions(self):
-        with open('instructions.txt', 'r') as instructions:
+        with open('instructions.txt', 'r', encoding='utf-8') as instructions:
             for step in instructions.read().split('$')[1::]:
                 self.steps.append(step.split(':'))
 
     def createTextWindow(self):
-        self.textWindow = TextWindow('res/img/dialog2.png')
+        self.textWindow = TextWindow('res/img/dialog.png')
         self.objects.append(self.textWindow)
 
-    def createArrow(self, img='res/img/play.png', pos=(1125, 620)):
+    def createArrow(self, img, pos=cfg.arrowPos):
         self.arrow = PopUpObject(img, pos)
         self.objects.append(self.arrow)
 
@@ -155,15 +127,24 @@ class Game(object):
     def getReady(self):
         self.uploadInstructions()
         self.createBackground('res/img/none.png')
-        self.createPopUp1('res/img/none.png', (10, 30))
-        self.createPopUp2('res/img/none.png', (600, 70))
-        self.createPerson1('res/img/none.png', (110, 160))
-        self.createPerson2('res/img/none.png', (815, 145))
+        self.createPopUp1('res/img/none.png', cfg.popUp1Pos)
+        self.createPopUp2('res/img/none.png', cfg.popUp2pos)
+        self.createPerson1('res/img/none.png', cfg.hero1Pos)
+        self.createPerson2('res/img/none.png', cfg.hero2Pos)
         self.createTextWindow()
-        # self.createArrow()
+        self.createArrow('res/img/none.png')
         self.createTextObject('')
         self.createNameObject1('', 'name1')
         self.createNameObject2('', 'name2')
+
+    def drawNewText(self, text):
+        for obj in self.objects:
+            if obj.name == 'TextObject':
+                pass
+            else:
+                obj.draw(self.surface)
+            self.textObject.first = True
+            self.textObject.upload(text, self.surface)
 
     def gameOverLogo(self):
         while True:
