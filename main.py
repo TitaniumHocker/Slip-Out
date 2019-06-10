@@ -30,7 +30,7 @@ class Game(object):
         self.awaitChoise = False
         self.choisePause = False
 
-        pygame.mixer.pre_init(44100, 16, 2, 4096)
+        pygame.mixer.pre_init(44100, 16, 2, 40960)
         pygame.init()
         pygame.font.init()
         self.font = pygame.font.Font('res/fonts/16643.otf', 32)
@@ -187,14 +187,14 @@ class Game(object):
     def handleFX(self, fx, cmd):
         if fx == 'alert':
             if cmd == 'stop':
-                self.alert.set_volume(0)
+                self.alert.fadeout(500)
             elif cmd == 'play':
                 self.alert = pygame.mixer.Sound('res/soundFX/Alert.wav')
                 self.alert.set_volume(0.5)
                 self.alert.play()
         elif fx == 'bubbl':
             if cmd == 'stop':
-                self.bubbl.set_volume(0)
+                self.bubbl.fadeout(500)
             elif cmd == 'play':
                 self.bubbl = pygame.mixer.\
                              Sound('res/soundFX/bubbling_brook.wav')
@@ -202,7 +202,7 @@ class Game(object):
                 self.bubbl.play()
         elif fx == 'crowd':
             if cmd == 'stop':
-                self.crowd.set_volume(0)
+                self.crowd.fadeout(500)
             elif cmd == 'play':
                 self.crowd = pygame.mixer.\
                              Sound('res/soundFX/crowd_outside.wav')
