@@ -31,7 +31,7 @@ $pause:true
 $popup1:res/img/scene-03.1.png&700&70
 $text:Мои мысли прервал резки звук, это была сирена.
 $pause:true
-$FX:alarm
+$FX:alert
 $popup1:res/img/none.png&0&0
 $background:res/img/scene-04.0.png
 $popup1:res/img/scene-04.1.png&600&70

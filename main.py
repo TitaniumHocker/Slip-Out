@@ -198,7 +198,7 @@ class Game(object):
                 self.bubbl.fadeout(500)
             elif cmd == 'play':
                 self.bubbl = pygame.mixer.\
-                             Sound('res/soundFX/bubbling_brook.wav')
+                             Sound('res/soundFX/bubbling.wav')
                 self.bubbl.set_volume(0.5)
                 self.bubbl.play()
         elif fx == 'crowd':
@@ -206,7 +206,7 @@ class Game(object):
                 self.crowd.fadeout(500)
             elif cmd == 'play':
                 self.crowd = pygame.mixer.\
-                             Sound('res/soundFX/crowd_outside.wav')
+                             Sound('res/soundFX/Crowd.wav')
                 self.crowd.set_volume(0.5)
                 self.crowd.play()
 
