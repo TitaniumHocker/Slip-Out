@@ -33,6 +33,7 @@ class Game(object):
         pygame.mixer.pre_init(44100, 16, 2, 40960)
         pygame.init()
         pygame.font.init()
+        pygame.mixer.init()
         self.font = pygame.font.Font('res/fonts/16643.otf', 32)
         self.surface = pygame.display.set_mode((width, height), SRCALPHA)
         pygame.display.set_caption(caption)
