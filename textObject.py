@@ -10,7 +10,7 @@ from pygame import Color
 from pygame.time import delay
 from pygame import display
 
-colour = (25, 25, 25)
+colour = (20, 20, 20)
 
 
 class TextObject(Sprite):
@@ -39,6 +39,7 @@ class TextObject(Sprite):
         surface.blit(self.surface, (0, 0))
         display.update()
         for i, txt in enumerate(self.txt):
+            self.advance = 0
             for k, sign in enumerate(txt.strip()):
                 if sign == '|':
                     pass
@@ -46,12 +47,14 @@ class TextObject(Sprite):
                     self.signSurface = Surface((1280, 720), SRCALPHA)
                     self.textSurface = self.font.render(sign, True, colour)
                     self.signSurface.blit(self.textSurface,
-                                          (k * 11 + 90, self.pos[i]))
-                    self.surface.blit(self.textSurface, (k * 11 + 90,
-                                      self.pos[i]))
+                                          (90 + self.advance, self.pos[i]))
+                    self.surface.blit(self.textSurface,
+                                      (90 + self.advance,
+                                       self.pos[i]))
                     surface.blit(self.signSurface, (0, 0))
                     display.update()
                     delay(3)
+                    self.advance += self.font.metrics(sign)[0][4]
         self.first = False
 
     def draw(self, surface, typing=False):

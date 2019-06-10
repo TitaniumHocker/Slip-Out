@@ -5,3 +5,4 @@ popUp1Pos = (10, 30)
 popUp2pos = (600, 70)
 hero1Pos = (110, 160)
 hero2Pos = (815, 145)
+musicVolume = 0.2
