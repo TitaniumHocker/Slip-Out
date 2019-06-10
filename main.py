@@ -164,7 +164,7 @@ class Game(object):
             pygame.time.delay(3)
             self.advance += self.font.metrics(sign)[0][4]
         pygame.mixer.music.load('res/music/Main Menu OST.mp3')
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(-1)
 
         while self.startUp:
@@ -175,7 +175,7 @@ class Game(object):
 
     def gameOverLogo(self):
         pygame.mixer.music.load('res/music/Outro OST.mp3')
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play()
         while True:
             self.surface.blit(pygame.image.load('res/img/scene-12.0.png')
