@@ -86,8 +86,7 @@ class Game(object):
 
     def uploadInstructions(self):
         with open('instructions.txt', 'r', encoding='utf-8') as instructions:
-            for step in instructions.read().split('$')[1::]:
-                self.steps.append(step.split(':'))
+            self.rawSteps = instructions
 
     def createTextWindow(self):
         self.textWindow = TextWindow('res/img/dialog.png')
@@ -302,6 +301,41 @@ class Game(object):
                 self.gameOver = True
                 self.gameOverLogo()
             self.step += 1
+
+    def commandsHandler(self, delimiter=':', newLine='$'):
+        self.steps = self.rawSteps.split(newLine)
+        while not self.pause:
+            self.buffStep = self.steps[self.step].split(delimiter)
+            if self.steps[self.step] == '':
+                pass
+            elif self.gameOver:
+                self.gameOverLogo()
+            elif self.buffStep[0].strip() == 'pause':
+                pass
+            elif self.buffStep[0].strip() == 'gameover':
+                pass
+            elif self.buffStep[0].strip() == 'text':
+                pass
+            elif self.buffStep[0].strip() == 'background':
+                pass
+            elif self.buffStep[0].strip() == 'textwindow':
+                pass
+            elif self.buffStep[0].strip() == 'FX':
+                pass
+            elif self.buffStep[0].strip() == 'name1':
+                pass
+            elif self.buffStep[0].strip() == 'name2':
+                pass
+            elif self.buffStep[0].strip() == 'person1':
+                pass
+            elif self.buffStep[0].strip() == 'person2':
+                pass
+            elif self.buffStep[0].strip() == 'popup1':
+                pass
+            elif self.buffStep[0].strip() == 'popup2':
+                pass
+            elif self.buffStep[0].strip() == 'choise':
+                pass
 
     def run(self):
         self.menu()
